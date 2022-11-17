@@ -211,7 +211,7 @@ class BayesianModelSampler(Sampler):
             # En otro caso, verificamos si se desea que se devuelvan valores
             # cercanos o alejados a los ya devueltos
             if self._exploration:
-                # En caso de que se deseen valores lejanos, buscamos qué valoresm
+                # En caso de que se deseen valores lejanos, buscamos qué valores
                 # tienen mayor cantidad de elementos cercanos en alfa a sí mismos,
                 # en otras palabras, clubsterizamos
                 if len(values_choosen) == 1:

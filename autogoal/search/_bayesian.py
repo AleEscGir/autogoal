@@ -1,5 +1,5 @@
 
-from ._base import SearchAlgorithm
+from ._base import SearchAlgorithm, Logger
 from typing import Mapping, Optional, Dict, List, Sequence
 from random import random
 from autogoal.sampling._bayesianModelSampler import BayesianModelSampler, clubster_by_epsilon, Bernoulli
@@ -37,7 +37,7 @@ class BayesianOptimizationSearch(SearchAlgorithm):
             sampler = BayesianModelSampler(alpha=self._alpha, exploration=True)
         else:
             self._model = self._samplers[len(self._samplers) - 1]._model
-            sampler = BayesianModelSampler(self._model, self._alpha, exploration=not(Bernoulli(self._alpha)))
+            sampler = BayesianModelSampler(self._model, self._alpha, exploration=Bernoulli(1-self._alpha))
 
         self._alpha += self._alpha_increment
 
@@ -57,6 +57,9 @@ class BayesianOptimizationSearch(SearchAlgorithm):
 
         samplers_values = [self._samplers[i]._alpha for i in indices]
 
+        if len(samplers_values) == 0:
+            return
+
         clubsters = clubster_by_epsilon(samplers_values, self._epsilon)
         
         max_value = 0
@@ -66,8 +69,9 @@ class BayesianOptimizationSearch(SearchAlgorithm):
             if clubsters[i] > max_value:
                 max_value = clubsters[i]
                 pos = i
-        
+
         self._alpha = samplers_values[pos]
 
+
+
         
-    
